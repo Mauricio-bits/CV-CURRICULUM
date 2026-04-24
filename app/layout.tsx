@@ -1,7 +1,8 @@
 import "./globals.css";
 import Navbar from "../components/Navbar";
 
-export default function RootLayout({ children }) {
+// Añadimos la definición de tipo para children
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
       <body>
@@ -10,4 +11,4 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   );
-} 
+}
