@@ -5,10 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 
 const skills = [
-  {
-    title: "HTML",
-    desc: "Bases en desarrollo web y lógica de programación.",
-  },
+  { title: "HTML", desc: "Bases en desarrollo web y lógica de programación." },
   { title: "SQL", desc: "Gestión de bases de datos y consultas avanzadas." },
   {
     title: "Git & GitHub",
@@ -22,8 +19,6 @@ const skills = [
   { title: "Next.js", desc: "Framework moderno y optimizado." },
   { title: "JavaScript", desc: "Lenguaje base del desarrollo web." },
   { title: "Tailwind CSS", desc: "Diseño moderno y rápido." },
-
-  // 🔥 NUEVAS
   { title: "Docker", desc: "Contenedores para despliegue eficiente." },
   { title: "C#", desc: "Lenguaje robusto para aplicaciones backend." },
   { title: "Blazor", desc: "Desarrollo web moderno con .NET." },
@@ -65,7 +60,6 @@ export default function Hero() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // 🔥 SIMULACIÓN DESCARGA PRO
   const handleDownload = () => {
     setLoading(true);
     setProgress(0);
@@ -77,7 +71,6 @@ export default function Hero() {
 
       if (value >= 100) {
         clearInterval(interval);
-
         setTimeout(() => {
           window.open("/cv/cv-mauricio.pdf", "_blank");
           setLoading(false);
@@ -87,7 +80,10 @@ export default function Hero() {
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center text-center px-4">
+    <section className="relative min-h-screen flex flex-col items-center text-center px-4 overflow-hidden">
+      {/* 🔥 FONDO IGUAL QUE ABOUT */}
+      <div className="fixed inset-0 bg-[#020617] -z-10" />
+
       <div className="flex flex-col items-center justify-center min-h-screen">
         {/* TITULO */}
         <motion.h1
@@ -114,7 +110,7 @@ export default function Hero() {
             <Link href="/projects">
               <motion.button
                 whileHover={{ scale: 1.1 }}
-                className="px-6 py-3 bg-blue-500 rounded-full shadow-lg hover:bg-blue-600"
+                className="px-6 py-3 bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 transition"
               >
                 Ver proyectos 🚀
               </motion.button>
@@ -123,13 +119,13 @@ export default function Hero() {
             <motion.button
               whileHover={{ scale: 1.1 }}
               onClick={handleDownload}
-              className="px-6 py-3 border border-white/20 rounded-full hover:bg-white/10"
+              className="px-6 py-3 border border-white/20 rounded-full hover:bg-white/10 transition"
             >
               Descargar CV
             </motion.button>
           </div>
 
-          {/* 🔥 BARRA DE PROGRESO */}
+          {/* PROGRESO */}
           <AnimatePresence>
             {loading && (
               <motion.div
@@ -153,7 +149,7 @@ export default function Hero() {
           </AnimatePresence>
         </div>
 
-        {/* 🔥 TARJETAS */}
+        {/* TARJETAS */}
         <div
           ref={containerRef}
           className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl"
@@ -203,7 +199,7 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* 🔥 STATS */}
+        {/* STATS */}
         <div className="mt-32 md:mt-40 grid grid-cols-2 md:grid-cols-6 gap-6 max-w-6xl text-center">
           {[
             { number: "1+", label: "Proyectos" },
@@ -218,7 +214,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.2, type: "spring", stiffness: 120 }}
-              className="p-6 rounded-xl bg-white/5 border border-white/10"
+              className="p-6 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xl"
             >
               <h2 className="text-3xl font-bold text-blue-400">
                 {item.number}
