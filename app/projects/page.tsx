@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 
+// 🔥 FUERA DEL COMPONENTE (no se recrea)
 const tech = [
   "ASP.NET Core API",
   "Blazor Server",
@@ -16,14 +17,15 @@ const tech = [
 export default function ProjectsPage() {
   return (
     <section className="relative min-h-screen px-6 py-10 text-white overflow-hidden">
-      {/* 🔥 MISMO FONDO QUE ABOUT */}
+      {/* FONDO */}
       <div className="fixed inset-0 bg-[#020617] -z-1" />
 
       <div className="max-w-6xl mx-auto">
-        {/* 🔥 HEADER */}
+        {/* HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }} // 🔥 agregado
           className="text-center mb-15"
         >
           <h1 className="text-5xl md:text-6xl font-bold">
@@ -36,12 +38,14 @@ export default function ProjectsPage() {
           </p>
         </motion.div>
 
-        {/* 🔥 GRID PRINCIPAL */}
+        {/* GRID */}
         <div className="grid md:grid-cols-2 gap-10 items-start">
-          {/* 🔥 LADO IZQUIERDO (INFO PRINCIPAL) */}
+          {/* IZQUIERDA */}
           <motion.div
             initial={{ opacity: 0, x: -80 }}
             whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }} // 🔥 CLAVE
+            transition={{ duration: 0.5 }}
             className="space-y-6"
           >
             <div className="brutal-box p-6">
@@ -60,7 +64,6 @@ export default function ProjectsPage() {
               </p>
             </div>
 
-            {/* 🔥 ROL */}
             <div className="brutal-box p-6">
               <h3 className="text-xl font-bold text-blue-400 mb-2">👨‍💻 Rol</h3>
               <p className="text-gray-300">
@@ -70,23 +73,26 @@ export default function ProjectsPage() {
             </div>
           </motion.div>
 
-          {/* 🔥 LADO DERECHO (TEC + FEATURES) */}
+          {/* DERECHA */}
           <motion.div
             initial={{ opacity: 0, x: 80 }}
             whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }} // 🔥 CLAVE
+            transition={{ duration: 0.5 }}
             className="space-y-6"
           >
-            {/* TECNOLOGÍAS */}
+            {/* TEC */}
             <div className="brutal-box p-6">
               <h3 className="text-xl font-bold text-blue-400 mb-4">
                 ⚙️ Tecnologías
               </h3>
 
               <div className="flex flex-wrap gap-3">
-                {tech.map((t, i) => (
+                {tech.map((t) => (
                   <motion.span
-                    key={i}
-                    whileHover={{ scale: 1.1 }}
+                    key={t} // 🔥 mejor key
+                    whileHover={{ scale: 1.08 }} // 🔥 más ligero
+                    transition={{ duration: 0.2 }}
                     className="tag-brutal"
                   >
                     {t}
@@ -95,7 +101,7 @@ export default function ProjectsPage() {
               </div>
             </div>
 
-            {/* FUNCIONALIDADES */}
+            {/* FEATURES */}
             <div className="brutal-box p-6">
               <h3 className="text-xl font-bold text-blue-400 mb-4">
                 🚀 Funcionalidades
@@ -112,10 +118,12 @@ export default function ProjectsPage() {
           </motion.div>
         </div>
 
-        {/* 🔥 SECCIÓN EXTRA (IMPACTO VISUAL) */}
+        {/* EXTRA */}
         <motion.div
           initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} // 🔥 CLAVE
+          transition={{ duration: 0.5 }}
           className="mt-24 text-center brutal-box p-10"
         >
           <h3 className="text-3xl font-bold mb-4">⚡ Arquitectura Moderna</h3>
@@ -128,7 +136,7 @@ export default function ProjectsPage() {
         </motion.div>
       </div>
 
-      {/* 🔥 ESTILOS */}
+      {/* ESTILOS */}
       <style jsx>{`
         .brutal-box {
           background: #0b1220;
