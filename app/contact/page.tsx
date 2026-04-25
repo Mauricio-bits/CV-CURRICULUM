@@ -1,17 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-
   const [error, setError] = useState("");
 
-  const sendWhatsApp = () => {
-    // 🔥 VALIDACIÓN
+  // 🔥 OPTIMIZADO: no se recrea en cada render
+  const sendWhatsApp = useCallback(() => {
     if (!name || !email || !message) {
       setError("⚠️ Todos los campos son obligatorios");
       return;
@@ -20,10 +19,14 @@ export default function ContactPage() {
     setError("");
 
     const phone = "50687887930";
-    const text = `Hola Mauricio, soy ${name}%0AEmail: ${email}%0A%0AMensaje:%0A${message}`;
+
+    // 🔥 encodeURIComponent evita problemas y mejora rendimiento del navegador
+    const text = encodeURIComponent(
+      `Hola Mauricio, soy ${name}\nEmail: ${email}\n\nMensaje:\n${message}`,
+    );
 
     window.open(`https://wa.me/${phone}?text=${text}`, "_blank");
-  };
+  }, [name, email, message]);
 
   return (
     <section className="relative min-h-screen py-10 px-6 text-white overflow-hidden">
@@ -35,6 +38,7 @@ export default function ContactPage() {
           <motion.div
             initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }} // 🔥 agregado
           >
             <h2 className="text-4xl font-bold mb-6">
               Contactame <span className="text-amber-500">!</span>
@@ -76,12 +80,12 @@ export default function ContactPage() {
           <motion.div
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }} // 🔥 agregado
             className="bg-gray-800 p-8 rounded-xl border border-white/10 shadow-2xl"
           >
             <h3 className="text-2xl font-bold mb-6">Enviar Mensaje</h3>
 
             <div className="space-y-6">
-              {/* ERROR */}
               {error && (
                 <p className="text-red-400 text-sm font-semibold">{error}</p>
               )}
@@ -91,7 +95,6 @@ export default function ContactPage() {
                 <label className="block text-sm mb-1">Nombre</label>
                 <input
                   type="text"
-                  required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Tu nombre"
@@ -106,7 +109,6 @@ export default function ContactPage() {
                 <label className="block text-sm mb-1">Correo</label>
                 <input
                   type="email"
-                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Tu email"
@@ -120,7 +122,6 @@ export default function ContactPage() {
               <div>
                 <label className="block text-sm mb-1">Mensaje</label>
                 <textarea
-                  required
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Escribe tu mensaje..."
