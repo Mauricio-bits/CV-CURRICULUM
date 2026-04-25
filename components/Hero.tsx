@@ -8,30 +8,52 @@ const skills = [
   {
     title: "HTML & C#",
     desc: "Bases en desarrollo web y lógica de programación orientada a objetos.",
-    img: "https://via.placeholder.com/400x200",
   },
   {
     title: "SQL",
     desc: "Gestión de bases de datos y consultas avanzadas.",
-    img: "https://via.placeholder.com/400x200",
   },
   {
     title: "Git & GitHub",
     desc: "Control de versiones y trabajo colaborativo profesional.",
-    img: "https://via.placeholder.com/400x200",
   },
   {
     title: "Inteligencia Artificial",
     desc: "Uso de IA en soluciones modernas y automatización.",
-    img: "https://via.placeholder.com/400x200",
   },
+  {
+    title: "React",
+    desc: "Construcción de interfaces dinámicas y reutilizables.",
+  },
+  {
+    title: "Next.js",
+    desc: "Framework moderno para aplicaciones web rápidas y escalables.",
+  },
+  {
+    title: "JavaScript",
+    desc: "Lenguaje base para desarrollo web interactivo.",
+  },
+  {
+    title: "Tailwind CSS",
+    desc: "Diseño moderno, rápido y altamente personalizable.",
+  },
+];
+
+const images = [
+  "html.jpg",
+  "sql.jpg",
+  "git.jpg",
+  "ai.jpg",
+  "react.jpg",
+  "next.jpg",
+  "js.jpg",
+  "tailwind.jpg",
 ];
 
 export default function Hero() {
   const [active, setActive] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // ✅ CLICK FUERA → CIERRA TODO
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -87,7 +109,7 @@ export default function Hero() {
           </motion.button>
         </div>
 
-        {/* 🔥 TARJETAS TIPO BLOCK (COMO PEDISTE) */}
+        {/* 🔥 TARJETAS */}
         <div
           ref={containerRef}
           className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl"
@@ -102,7 +124,7 @@ export default function Hero() {
               {/* IMAGEN */}
               <div className="absolute inset-0">
                 <img
-                  src={`/images/${["html.jpg", "sql.jpg", "git.jpg", "ai.jpg"][i]}`}
+                  src={`/images/${images[i]}`}
                   alt={skill.title}
                   className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition"
                 />
@@ -113,10 +135,8 @@ export default function Hero() {
 
               {/* CONTENIDO */}
               <div className="relative z-10 flex flex-col justify-end h-full p-5">
-                {/* TITULO */}
                 <h3 className="text-lg font-bold text-white">{skill.title}</h3>
 
-                {/* DESCRIPCIÓN CONTROLADA */}
                 <AnimatePresence>
                   {active === i && (
                     <motion.p
@@ -130,7 +150,6 @@ export default function Hero() {
                   )}
                 </AnimatePresence>
 
-                {/* BOTÓN */}
                 <div className="mt-3">
                   <span className="text-xs text-blue-400">
                     {active === i ? "Ocultar ↑" : "Ver más →"}
@@ -138,17 +157,21 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* EFECTO GLOW */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-blue-500/10 blur-xl" />
             </motion.div>
           ))}
         </div>
 
-        {/* 🔥 STATS (MISMO DISEÑO + ANIMACIÓN BRINCO) */}
-        <div className="mt-32 md:mt-40 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl text-center">
+        {/* 🔥 STATS MEJORADOS */}
+        <div className="mt-32 md:mt-40 grid grid-cols-2 md:grid-cols-6 gap-6 max-w-6xl text-center">
           {[
-            { number: "10+", label: "Proyectos" },
+            { number: "1+", label: "Proyectos" },
             { number: "1+", label: "Años" },
+
+            // NUEVOS EN EL CENTRO 👇
+            { number: "24/7", label: "Aprendizaje" },
+            { number: "⚡", label: "Innovación" },
+
             { number: "100%", label: "Compromiso" },
             { number: "∞", label: "Creatividad" },
           ].map((item, i) => (
