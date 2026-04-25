@@ -7,36 +7,27 @@ import Link from "next/link";
 const skills = [
   {
     title: "HTML & C#",
-    desc: "Bases en desarrollo web y lógica de programación orientada a objetos.",
+    desc: "Bases en desarrollo web y lógica de programación.",
   },
-  {
-    title: "SQL",
-    desc: "Gestión de bases de datos y consultas avanzadas.",
-  },
+  { title: "SQL", desc: "Gestión de bases de datos y consultas avanzadas." },
   {
     title: "Git & GitHub",
-    desc: "Control de versiones y trabajo colaborativo profesional.",
+    desc: "Control de versiones y trabajo colaborativo.",
   },
   {
     title: "Inteligencia Artificial",
-    desc: "Uso de IA en soluciones modernas y automatización.",
+    desc: "Uso de IA en soluciones modernas.",
   },
-  {
-    title: "React",
-    desc: "Construcción de interfaces dinámicas y reutilizables.",
-  },
-  {
-    title: "Next.js",
-    desc: "Framework moderno para aplicaciones web rápidas y escalables.",
-  },
-  {
-    title: "JavaScript",
-    desc: "Lenguaje base para desarrollo web interactivo.",
-  },
-  {
-    title: "Tailwind CSS",
-    desc: "Diseño moderno, rápido y altamente personalizable.",
-  },
+  { title: "React", desc: "Interfaces dinámicas y reutilizables." },
+  { title: "Next.js", desc: "Framework moderno y optimizado." },
+  { title: "JavaScript", desc: "Lenguaje base del desarrollo web." },
+  { title: "Tailwind CSS", desc: "Diseño moderno y rápido." },
+
+  // 🔥 NUEVAS
+  { title: "Docker", desc: "Contenedores para despliegue eficiente." },
+  { title: "C#", desc: "Lenguaje robusto para aplicaciones backend." },
+  { title: "Blazor", desc: "Desarrollo web moderno con .NET." },
+  { title: "CSS", desc: "Estilos avanzados y diseño responsive." },
 ];
 
 const images = [
@@ -48,10 +39,17 @@ const images = [
   "next.jpg",
   "js.jpg",
   "tailwind.jpg",
+  "docker.jpg",
+  "csharp.jpg",
+  "blazor.jpg",
+  "css.jpg",
 ];
 
 export default function Hero() {
   const [active, setActive] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -63,10 +61,30 @@ export default function Hero() {
         setActive(null);
       }
     };
-
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
+
+  // 🔥 SIMULACIÓN DESCARGA PRO
+  const handleDownload = () => {
+    setLoading(true);
+    setProgress(0);
+
+    let value = 0;
+    const interval = setInterval(() => {
+      value += 10;
+      setProgress(value);
+
+      if (value >= 100) {
+        clearInterval(interval);
+
+        setTimeout(() => {
+          window.open("/cv/cv-mauricio.pdf", "_blank");
+          setLoading(false);
+        }, 300);
+      }
+    }, 150);
+  };
 
   return (
     <section className="min-h-screen flex flex-col items-center text-center px-4">
@@ -91,22 +109,48 @@ export default function Hero() {
         </motion.p>
 
         {/* BOTONES */}
-        <div className="flex gap-4 mt-8">
-          <Link href="/projects">
+        <div className="flex gap-4 mt-8 flex-col items-center">
+          <div className="flex gap-4">
+            <Link href="/projects">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                className="px-6 py-3 bg-blue-500 rounded-full shadow-lg hover:bg-blue-600"
+              >
+                Ver proyectos 🚀
+              </motion.button>
+            </Link>
+
             <motion.button
               whileHover={{ scale: 1.1 }}
-              className="px-6 py-3 bg-blue-500 rounded-full shadow-lg hover:bg-blue-600"
+              onClick={handleDownload}
+              className="px-6 py-3 border border-white/20 rounded-full hover:bg-white/10"
             >
-              Ver proyectos 🚀
+              Descargar CV
             </motion.button>
-          </Link>
+          </div>
 
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            className="px-6 py-3 border border-white/20 rounded-full hover:bg-white/10"
-          >
-            Descargar CV
-          </motion.button>
+          {/* 🔥 BARRA DE PROGRESO */}
+          <AnimatePresence>
+            {loading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="w-64 mt-4"
+              >
+                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full bg-blue-500"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                  />
+                </div>
+                <p className="text-xs text-gray-400 mt-1">
+                  Descargando... {progress}%
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* 🔥 TARJETAS */}
@@ -121,7 +165,6 @@ export default function Hero() {
               className="relative h-[320px] rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-xl group cursor-pointer"
               onClick={() => setActive(active === i ? null : i)}
             >
-              {/* IMAGEN */}
               <div className="absolute inset-0">
                 <img
                   src={`/images/${images[i]}`}
@@ -130,10 +173,8 @@ export default function Hero() {
                 />
               </div>
 
-              {/* OVERLAY */}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-              {/* CONTENIDO */}
               <div className="relative z-10 flex flex-col justify-end h-full p-5">
                 <h3 className="text-lg font-bold text-white">{skill.title}</h3>
 
@@ -162,16 +203,13 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* 🔥 STATS MEJORADOS */}
+        {/* 🔥 STATS */}
         <div className="mt-32 md:mt-40 grid grid-cols-2 md:grid-cols-6 gap-6 max-w-6xl text-center">
           {[
             { number: "1+", label: "Proyectos" },
             { number: "1+", label: "Años" },
-
-            // NUEVOS EN EL CENTRO 👇
             { number: "24/7", label: "Aprendizaje" },
             { number: "⚡", label: "Innovación" },
-
             { number: "100%", label: "Compromiso" },
             { number: "∞", label: "Creatividad" },
           ].map((item, i) => (
