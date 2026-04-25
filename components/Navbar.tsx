@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 const links = [
   { name: "Inicio", path: "/" },
-  { name: "Sobre mí", path: "/about" },
+  { name: "Habilidades", path: "/about" },
   { name: "Proyectos", path: "/projects" },
   { name: "Contacto", path: "/contact" },
 ];
@@ -17,7 +17,6 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-black/30 backdrop-blur-xl border-b border-white/10">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4 text-white">
-
         {/* LOGO */}
         <h1 className="text-xl font-bold tracking-widest cursor-pointer hover:scale-105 transition">
           <span className="text-blue-400">⚡</span> MAURO.DEV
@@ -30,7 +29,6 @@ export default function Navbar() {
 
             return (
               <Link key={link.path} href={link.path} className="relative group">
-
                 <span className="text-sm uppercase tracking-wider group-hover:text-blue-400 transition">
                   {link.name}
                 </span>
@@ -48,7 +46,6 @@ export default function Navbar() {
                 {isActive && (
                   <div className="absolute inset-0 blur-md bg-blue-500/20 -z-10 rounded-full" />
                 )}
-
               </Link>
             );
           })}
