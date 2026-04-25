@@ -1,28 +1,50 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 
 const skills = [
-  { title: "HTML", desc: "Bases en desarrollo web y lógica de programación." },
-  { title: "SQL", desc: "Gestión de bases de datos y consultas avanzadas." },
   {
+    id: "html",
+    title: "HTML",
+    desc: "Bases en desarrollo web y lógica de programación.",
+  },
+  {
+    id: "sql",
+    title: "SQL",
+    desc: "Gestión de bases de datos y consultas avanzadas.",
+  },
+  {
+    id: "git",
     title: "Git & GitHub",
     desc: "Control de versiones y trabajo colaborativo.",
   },
   {
+    id: "ai",
     title: "Inteligencia Artificial",
     desc: "Uso de IA en soluciones modernas.",
   },
-  { title: "React", desc: "Interfaces dinámicas y reutilizables." },
-  { title: "Next.js", desc: "Framework moderno y optimizado." },
-  { title: "JavaScript", desc: "Lenguaje base del desarrollo web." },
-  { title: "Tailwind CSS", desc: "Diseño moderno y rápido." },
-  { title: "Docker", desc: "Contenedores para despliegue eficiente." },
-  { title: "C#", desc: "Lenguaje robusto para aplicaciones backend." },
-  { title: "Blazor", desc: "Desarrollo web moderno con .NET." },
-  { title: "CSS", desc: "Estilos avanzados y diseño responsive." },
+  {
+    id: "react",
+    title: "React",
+    desc: "Interfaces dinámicas y reutilizables.",
+  },
+  { id: "next", title: "Next.js", desc: "Framework moderno y optimizado." },
+  { id: "js", title: "JavaScript", desc: "Lenguaje base del desarrollo web." },
+  { id: "tailwind", title: "Tailwind CSS", desc: "Diseño moderno y rápido." },
+  {
+    id: "docker",
+    title: "Docker",
+    desc: "Contenedores para despliegue eficiente.",
+  },
+  {
+    id: "csharp",
+    title: "C#",
+    desc: "Lenguaje robusto para aplicaciones backend.",
+  },
+  { id: "blazor", title: "Blazor", desc: "Desarrollo web moderno con .NET." },
+  { id: "css", title: "CSS", desc: "Estilos avanzados y diseño responsive." },
 ];
 
 const images = [
@@ -41,12 +63,14 @@ const images = [
 ];
 
 export default function Hero() {
-  const [active, setActive] = useState<number | null>(null);
+  const [active, setActive] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  // 🔥 CLICK OUTSIDE OPTIMIZADO
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -56,32 +80,42 @@ export default function Hero() {
         setActive(null);
       }
     };
-    document.addEventListener("click", handleClickOutside);
+
+    document.addEventListener("click", handleClickOutside, { passive: true });
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  const handleDownload = () => {
+  // 🔥 INTERVAL CONTROLADO (CLAVE)
+  const handleDownload = useCallback(() => {
     setLoading(true);
     setProgress(0);
 
     let value = 0;
-    const interval = setInterval(() => {
+
+    intervalRef.current = setInterval(() => {
       value += 10;
       setProgress(value);
 
-      if (value >= 100) {
-        clearInterval(interval);
+      if (value >= 100 && intervalRef.current) {
+        clearInterval(intervalRef.current);
+
         setTimeout(() => {
           window.open("/cv/cv-mauricio.pdf", "_blank");
           setLoading(false);
         }, 300);
       }
     }, 150);
-  };
+  }, []);
+
+  // 🔥 LIMPIEZA DE INTERVAL (CRÍTICO)
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
 
   return (
     <section className="relative min-h-screen flex flex-col items-center text-center px-4 overflow-hidden">
-      {/* 🔥 FONDO IGUAL QUE ABOUT */}
       <div className="fixed inset-0 bg-[#020617] -z-10" />
 
       <div className="flex flex-col items-center justify-center min-h-screen">
@@ -89,6 +123,7 @@ export default function Hero() {
         <motion.h1
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
           className="text-5xl md:text-7xl font-bold"
         >
           Hola, soy <span className="text-blue-400">Ing. Mauricio</span>
@@ -98,7 +133,7 @@ export default function Hero() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
           className="mt-4 text-lg text-gray-300 max-w-xl"
         >
           Desarrollo experiencias web modernas, interactivas y profesionales.
@@ -109,7 +144,7 @@ export default function Hero() {
           <div className="flex gap-4">
             <Link href="/projects">
               <motion.button
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.08 }}
                 className="px-6 py-3 bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 transition"
               >
                 Ver proyectos 🚀
@@ -117,7 +152,7 @@ export default function Hero() {
             </Link>
 
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.08 }}
               onClick={handleDownload}
               className="px-6 py-3 border border-white/20 rounded-full hover:bg-white/10 transition"
             >
@@ -137,7 +172,6 @@ export default function Hero() {
                 <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                   <motion.div
                     className="h-full bg-blue-500"
-                    initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
                   />
                 </div>
@@ -156,15 +190,16 @@ export default function Hero() {
         >
           {skills.map((skill, i) => (
             <motion.div
-              key={i}
-              whileHover={{ scale: 1.05, rotate: 1 }}
+              key={skill.id} // 🔥 FIX CLAVE
+              whileHover={{ scale: 1.04 }}
               className="relative h-[320px] rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-xl group cursor-pointer"
-              onClick={() => setActive(active === i ? null : i)}
+              onClick={() => setActive(active === skill.id ? null : skill.id)}
             >
               <div className="absolute inset-0">
                 <img
                   src={`/images/${images[i]}`}
                   alt={skill.title}
+                  loading="lazy" // 🔥 IMPORTANTE
                   className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition"
                 />
               </div>
@@ -175,7 +210,7 @@ export default function Hero() {
                 <h3 className="text-lg font-bold text-white">{skill.title}</h3>
 
                 <AnimatePresence>
-                  {active === i && (
+                  {active === skill.id && (
                     <motion.p
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -189,7 +224,7 @@ export default function Hero() {
 
                 <div className="mt-3">
                   <span className="text-xs text-blue-400">
-                    {active === i ? "Ocultar ↑" : "Ver más →"}
+                    {active === skill.id ? "Ocultar ↑" : "Ver más →"}
                   </span>
                 </div>
               </div>
@@ -210,10 +245,11 @@ export default function Hero() {
             { number: "∞", label: "Creatividad" },
           ].map((item, i) => (
             <motion.div
-              key={i}
+              key={item.label} // 🔥 FIX
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.2, type: "spring", stiffness: 120 }}
+              viewport={{ once: true }} // 🔥 CLAVE
+              transition={{ delay: i * 0.15 }}
               className="p-6 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xl"
             >
               <h2 className="text-3xl font-bold text-blue-400">

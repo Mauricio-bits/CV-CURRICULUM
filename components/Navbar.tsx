@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 
+// 🔥 FUERA DEL COMPONENTE
 const links = [
   { name: "Inicio", path: "/" },
   { name: "Habilidades", path: "/about" },
@@ -13,6 +15,9 @@ const links = [
 
 export default function Navbar() {
   const pathname = usePathname();
+
+  // 🔥 MEMO para evitar cálculos repetidos
+  const navLinks = useMemo(() => links, []);
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-black/30 backdrop-blur-xl border-b border-white/10">
@@ -24,7 +29,7 @@ export default function Navbar() {
 
         {/* LINKS */}
         <div className="flex gap-8">
-          {links.map((link) => {
+          {navLinks.map((link) => {
             const isActive = pathname === link.path;
 
             return (
@@ -33,16 +38,16 @@ export default function Navbar() {
                   {link.name}
                 </span>
 
-                {/* Línea animada */}
+                {/* 🔥 OPTIMIZADO */}
                 <motion.div
                   className="absolute left-0 -bottom-1 h-[2px] bg-blue-400"
-                  initial={{ width: 0 }}
+                  initial={false} // 🔥 evita animación inicial innecesaria
                   animate={{ width: isActive ? "100%" : "0%" }}
                   whileHover={{ width: "100%" }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.2 }} // 🔥 más ligero
                 />
 
-                {/* Glow */}
+                {/* GLOW */}
                 {isActive && (
                   <div className="absolute inset-0 blur-md bg-blue-500/20 -z-10 rounded-full" />
                 )}
