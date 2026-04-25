@@ -65,12 +65,12 @@ export default function AboutPage() {
       <div className="fixed inset-0 bg-[#020617] z-0" />
 
       {/* CONTENIDO */}
-      <div className="relative z-10">
+      <div className="relative z-5">
         {/* TITULO */}
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-5xl md:text-6xl font-bold text-center mb-16"
+          className="text-5xl md:text-6xl font-bold text-center mb-1"
         >
           Mi <span className="text-blue-400">Experiencia</span>
         </motion.h1>
