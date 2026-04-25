@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const skills = [
   {
-    title: "HTML & C#",
+    title: "HTML",
     desc: "Bases en desarrollo web y lógica de programación.",
   },
   { title: "SQL", desc: "Gestión de bases de datos y consultas avanzadas." },
